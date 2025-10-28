@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+data/
+models/
+dvclive/
+artifacts/
+metrics/
+plots/

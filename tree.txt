@@ -1,0 +1,21 @@
+mlops-fmnist-dvc/
+├── Makefile
+├── requirements.txt
+├── params.yaml
+├── dvc.yaml
+├── .gitignore
+├── .dvcignore
+├── src/
+│   ├── utils.py
+│   ├── models.py
+│   ├── prepare_data.py
+│   ├── augment_data.py
+│   ├── compute_stats.py
+│   ├── train.py
+│   └── evaluate.py
+├── data/           # dvc-артефакты (не в git)
+├── artifacts/      # вспомогательные json'ы
+├── models/         # чекпойнты
+├── metrics/        # метрики для dvc
+├── plots/          # графики/матрицы (опц.)
+└── dvclive/        # логи обучения (DVC Live)

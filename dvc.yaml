@@ -1,0 +1,65 @@
+stages:
+  prepare:
+    cmd: python -m src.prepare_data --out data/raw --val-size ${data.val_size} 
+      --seed ${seed}
+    deps:
+    - src/prepare_data.py
+    outs:
+    - data/raw
+
+  augment:
+    cmd: python -m src.augment_data --in data/raw --out data/augmented 
+      --n-per-image ${augment.n_per_image} --max-per-class 
+      ${augment.max_per_class} --seed ${seed}
+    deps:
+    - src/augment_data.py
+    - data/raw
+    outs:
+    - data/augmented
+
+  stats:
+    cmd: python -m src.compute_stats --data ${data_path} --out 
+      artifacts/stats.json
+    deps:
+    - src/compute_stats.py
+    - ${data_path}
+    outs:
+    - artifacts/stats.json
+
+  train:
+    cmd: python -m src.train --data ${data_path} --stats artifacts/stats.json 
+      --model ${model.type} --epochs ${train.epochs} --lr ${train.lr} 
+      --batch-size ${train.batch_size} --weight-decay ${train.weight_decay} 
+      --seed ${seed}
+    deps:
+    - src/train.py
+    - src/models.py
+    - src/utils.py
+    - artifacts/stats.json
+    - ${data_path}
+    outs:
+    - models/model.pt
+    metrics:
+    - metrics/train.json
+
+  evaluate:
+    cmd: python -m src.evaluate --data ${data_path} --stats artifacts/stats.json
+      --model-path models/model.pt --out metrics/eval.json --cm 
+      plots/confusion_matrix.csv
+    deps:
+    - src/evaluate.py
+    - src/models.py
+    - src/utils.py
+    - artifacts/stats.json
+    - models/model.pt
+    - metrics/train.json
+    - ${data_path}
+    metrics:
+    - metrics/eval.json
+    plots:
+    - plots/confusion_matrix.csv
+metrics:
+- dvclive/metrics.json
+plots:
+- dvclive/plots/metrics:
+    x: step
