@@ -3,14 +3,14 @@ seed: 42
 data:
   val_size: 0.1
 
-data_path: data/raw
+data_path: data/augmented
 
 augment:
   n_per_image: 2
   max_per_class: 6000
 
 model:
-  type: logreg          # logreg | simple_cnn | resnet18
+  type: resnet18        # logreg | simple_cnn | resnet18
 
 train:
   epochs: 1

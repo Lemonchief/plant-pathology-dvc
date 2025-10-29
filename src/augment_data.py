@@ -36,6 +36,13 @@ def copy_split(src_dir: Path, dst_dir: Path):
         for p in (src_dir / cls).glob("*.jpg"):
             copy2(p, dst_dir / cls / p.name)
 
+def copy_test(src_dir: Path, dst_dir: Path):
+    dst_dir.mkdir(parents=True, exist_ok=True)
+    placeholder_dir = dst_dir / "placeholder"
+    placeholder_dir.mkdir(parents=True, exist_ok=True)
+    for p in (src_dir / "placeholder").glob("*.jpg"):
+        copy2(p, placeholder_dir / p.name)
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--in", dest="inp", type=str, default="data/raw")
@@ -51,7 +58,7 @@ def main():
 
     augment_dir(src / "train", dst / "train", args.n_per_image, args.max_per_class or None)
     copy_split(src / "val",  dst / "val")
-    copy_split(src / "test", dst / "test")
+    copy_test(src / "test", dst / "test")  # вместо copy_split
 
 if __name__ == "__main__":
     main()

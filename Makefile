@@ -51,25 +51,25 @@ series-aug: exp-aug-logreg exp-aug-cnn exp-aug-resnet
 
 # --- ПОКАЗ/ЭКСПОРТ РЕЗУЛЬТАТОВ ---
 exps-show:
-	dvc exp show --precision 4
+	dvc exp show --precision 4 --no-pager
 
 exps-csv:
 	dvc exp show --precision 4 --csv > artifacts/experiments.csv
 
 exps-show-compact:
-    dvc exp show --precision 4 --only-changed --hide-workspace
+	dvc exp show --precision 4 --only-changed --hide-workspace --no-pager
 
 open-live:
-    start dvclive\report.html
+	@powershell -Command "Start-Process 'dvclive/report.html'"
 
 # --- ЧИСТКА (wipe) ---
 clean-outputs:
-	rm -rf data/raw data/augmented artifacts metrics models plots dvclive dvc.lock
+	powershell -Command "Remove-Item -Recurse -Force data/raw, data/augmented, artifacts, metrics, models, plots, dvclive, dvc.lock -ErrorAction SilentlyContinue" || exit 0
 
 # 2) подчистить историю экспериментов (и мусорные очереди)
 clean-exps:
-	dvc exp remove -A || true     # удалить все выполненные эксперименты (DVC 3.x)
-	dvc exp clean || true         # подчистить временные файлы очереди
+	dvc exp remove -A || true
+	dvc exp clean || true
 
 # 3) собрать мусор в локальном кэше DVC — оставить только то, что нужно воркспейсу
 clean-cache:
@@ -79,7 +79,8 @@ clean-cache:
 clean-all: clean-exps clean-outputs clean-cache
 
 # --- ЗАПУСК С НУЛЯ УДОБНЫМИ ШОРТАМИ ---
-fresh-raw: clean-all
+fresh-raw:
+	clean-all
 	dvc exp run -S data_path="data/raw"
 
 fresh-aug: clean-all
