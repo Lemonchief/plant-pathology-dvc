@@ -2,7 +2,10 @@ PY=python
 
 # --- БАЗОВОЕ ---
 setup:
-	python -m venv .venv && . .venv/bin/activate && pip install -U pip && pip install -r requirements.txt && dvc init -q
+	python -m venv .venv
+	.\.venv\Scripts\python.exe -m pip install -U pip
+	.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+	.\.venv\Scripts\dvc init -q
 
 prepare:
 	dvc repro prepare
@@ -54,10 +57,10 @@ exps-csv:
 	dvc exp show --precision 4 --csv > artifacts/experiments.csv
 
 exps-show-compact:
-	dvc exp show --precision 4 --only-changed --hide-workspace
+    dvc exp show --precision 4 --only-changed --hide-workspace
 
 open-live:
-	open dvclive/report.html
+    start dvclive\report.html
 
 # --- ЧИСТКА (wipe) ---
 clean-outputs:

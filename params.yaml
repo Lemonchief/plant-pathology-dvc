@@ -10,7 +10,7 @@ augment:
   max_per_class: 6000
 
 model:
-  type: resnet18        # logreg | simple_cnn | resnet18
+  type: logreg          # logreg | simple_cnn | resnet18
 
 train:
   epochs: 1

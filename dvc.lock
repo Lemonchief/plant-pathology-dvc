@@ -5,85 +5,85 @@ stages:
     deps:
     - path: src/prepare_data.py
       hash: md5
-      md5: c574383f1763ac50de58cce2448cd52e
-      size: 1697
+      md5: b4f9952466f2db3ec0cc9a7a7be0670b
+      size: 1971
     outs:
     - path: data/raw
       hash: md5
-      md5: c32e14049e5f85d24cf6c8ecf80a0436.dir
-      size: 121555795
-      nfiles: 70008
+      md5: 94918bb22daaae2ed11ccf43446191fd.dir
+      size: 823687857
+      nfiles: 3642
   augment:
     cmd: python -m src.augment_data --in data/raw --out data/augmented 
       --n-per-image 2 --max-per-class 6000 --seed 42
     deps:
     - path: data/raw
       hash: md5
-      md5: c32e14049e5f85d24cf6c8ecf80a0436.dir
-      size: 121555795
-      nfiles: 70008
+      md5: 94918bb22daaae2ed11ccf43446191fd.dir
+      size: 823687857
+      nfiles: 3642
     - path: src/augment_data.py
       hash: md5
-      md5: faa860ca37af5c7aac94b87da4881c69
-      size: 2038
+      md5: 94500bacfe58bc52112661a6456bbc62
+      size: 2095
     outs:
     - path: data/augmented
       hash: md5
-      md5: a054c95070a1ffd095acb2987c3b560e.dir
-      size: 88339949
-      nfiles: 178000
+      md5: fbf2589e02c3222883cfac041fd6c22a.dir
+      size: 897639646
+      nfiles: 4733
   stats:
     cmd: python -m src.compute_stats --data data/raw --out artifacts/stats.json
     deps:
     - path: data/raw
       hash: md5
-      md5: c32e14049e5f85d24cf6c8ecf80a0436.dir
-      size: 121555795
-      nfiles: 70008
+      md5: 94918bb22daaae2ed11ccf43446191fd.dir
+      size: 823687857
+      nfiles: 3642
     - path: src/compute_stats.py
       hash: md5
-      md5: d915c5231f2850776ee9e8e1c69c6c0d
-      size: 988
+      md5: 0434380bef1e2f74d36e838e46a938c6
+      size: 1021
     outs:
     - path: artifacts/stats.json
       hash: md5
-      md5: 963ca486204491d7f8d00a943d17364a
-      size: 62
+      md5: 192aad23a448d2bd4b472bca378a2b6b
+      size: 66
   train:
     cmd: python -m src.train --data data/raw --stats artifacts/stats.json 
-      --model resnet18 --epochs 1 --lr 0.01 --batch-size 64 --weight-decay 0.0 
+      --model logreg --epochs 1 --lr 0.01 --batch-size 64 --weight-decay 0.0 
       --seed 42
     deps:
     - path: artifacts/stats.json
       hash: md5
-      md5: 963ca486204491d7f8d00a943d17364a
-      size: 62
+      md5: 192aad23a448d2bd4b472bca378a2b6b
+      size: 66
     - path: data/raw
       hash: md5
-      md5: c32e14049e5f85d24cf6c8ecf80a0436.dir
-      size: 121555795
-      nfiles: 70008
+      md5: 94918bb22daaae2ed11ccf43446191fd.dir
+      size: 823687857
+      nfiles: 3642
     - path: src/models.py
       hash: md5
-      md5: 24738db6e2e030abfd85a61df9a7ac3f
-      size: 1200
+      md5: 5b1887059bd2757c3296a57d6793b08d
+      size: 1228
     - path: src/train.py
       hash: md5
-      md5: 8d11579ab22f605b0e8a03226ab6e97a
-      size: 3384
+      md5: 998b95a7b261ee74f0fc4c9aa7156abc
+      size: 3475
     - path: src/utils.py
       hash: md5
-      md5: ccb5a09206dda31874f245851e588585
-      size: 2137
+      md5: b59bb8c7bd9525a0679c0a003fe9bc96
+      size: 1997
     outs:
     - path: metrics/train.json
       hash: md5
-      md5: 5bac293cfca0e860ec4b8d4e446416fb
-      size: 101
+      md5: 67662aed2b2db8e0137271224d0d50a2
+      size: 105
     - path: models/model.pt
       hash: md5
-      md5: 85fb1924e88c95438e02f2ac565141f9
-      size: 44797323
+      md5: f2afb3099932137cd582cc1db330d581
+      size: 14421
   evaluate:
     cmd: python -m src.evaluate --data data/raw --stats artifacts/stats.json 
       --model-path models/model.pt --out metrics/eval.json --cm 
@@ -91,39 +91,39 @@ stages:
     deps:
     - path: artifacts/stats.json
       hash: md5
-      md5: 963ca486204491d7f8d00a943d17364a
-      size: 62
+      md5: 192aad23a448d2bd4b472bca378a2b6b
+      size: 66
     - path: data/raw
       hash: md5
-      md5: c32e14049e5f85d24cf6c8ecf80a0436.dir
-      size: 121555795
-      nfiles: 70008
+      md5: 94918bb22daaae2ed11ccf43446191fd.dir
+      size: 823687857
+      nfiles: 3642
     - path: metrics/train.json
       hash: md5
-      md5: 5bac293cfca0e860ec4b8d4e446416fb
-      size: 101
+      md5: 67662aed2b2db8e0137271224d0d50a2
+      size: 105
     - path: models/model.pt
       hash: md5
-      md5: 85fb1924e88c95438e02f2ac565141f9
-      size: 44797323
+      md5: f2afb3099932137cd582cc1db330d581
+      size: 14421
     - path: src/evaluate.py
       hash: md5
-      md5: ea1ecb44f4260168fddec964c8d17f1e
-      size: 1787
+      md5: 9b5a1dfcccc62a73e6ddad5630dc5caf
+      size: 1838
     - path: src/models.py
       hash: md5
-      md5: 24738db6e2e030abfd85a61df9a7ac3f
-      size: 1200
+      md5: 5b1887059bd2757c3296a57d6793b08d
+      size: 1228
     - path: src/utils.py
       hash: md5
-      md5: ccb5a09206dda31874f245851e588585
-      size: 2137
+      md5: b59bb8c7bd9525a0679c0a003fe9bc96
+      size: 1997
     outs:
     - path: metrics/eval.json
       hash: md5
-      md5: c8e51cd2a8af7662928802654cca852e
-      size: 51
+      md5: c30a9683d900826a2ddefe74254016e2
+      size: 56
     - path: plots/confusion_matrix.csv
       hash: md5
-      md5: a1e6977cf44d5cd6259ec5092f72f400
-      size: 252
+      md5: 05bf57d706c3af06faff14a581359cd4
+      size: 44
