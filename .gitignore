@@ -7,3 +7,5 @@ dvclive/
 artifacts/
 metrics/
 plots/
+.dvc/
+.idea
